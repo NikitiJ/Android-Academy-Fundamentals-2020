@@ -5,13 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 
-class MainActivity : AppCompatActivity() {
+class ActivityB : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_b)
+    }
+
+    fun onBackClick(view: View) {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     fun onForwardClick(view: View) {
-        startActivity(Intent(this, ActivityB::class.java))
+        startActivity(Intent(this, ActivityC::class.java))
     }
 }

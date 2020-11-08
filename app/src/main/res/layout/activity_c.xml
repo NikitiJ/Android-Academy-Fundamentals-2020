@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ActivityC">
 
     <TextView
         android:id="@+id/textView"
@@ -15,17 +15,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
-        android:text="Activity A" />
+        android:text="Activity C" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:onClick="onForwardClick"
-        android:text="Forward" />
+        app:layout_constraintEnd_toStartOf="@+id/buttonBackToA"
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="onBackClick"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonBackToA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onBackToAClick"
+        android:text="Back To Activity A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonBack"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

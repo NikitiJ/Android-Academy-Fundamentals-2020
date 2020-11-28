@@ -1,14 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorMainBg"
     tools:context=".fragments.MoviesListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+
+            <ImageView
+                android:id="@+id/imageViewListIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="56dp"
+                android:src="@drawable/moovie_list_icon" />
+
+            <TextView
+                android:id="@+id/listTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/imageViewListIcon"
+                app:layout_constraintTop_toTopOf="@+id/imageViewListIcon"
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewListIcon"
+                android:textStyle="bold"
+                android:lineHeight="20dp"
+                android:textSize="14sp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@android:color/white"
+                android:text="@string/movies_list" />
+
+
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/moviesListContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:columnCount="2"
+                android:layout_marginTop="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listTitle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="48dp">
+
+
+
+            </androidx.gridlayout.widget.GridLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

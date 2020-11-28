@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="170dp"
+    android:layout_height="300dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/innerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/viewBgBorder"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="#696970"/>
+
+        <View
+            android:id="@+id/viewBgMain"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/bg_movie_card"/>
+
+        <ImageView
+            android:id="@+id/logoImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="48dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/genresListValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/ratingBar"
+            app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="6dp"
+            android:textSize="8sp"
+            android:textColor="#FF3466"
+            app:layout_constraintEnd_toEndOf="@+id/logoImage"
+            tools:text="Action, Adventure, Drama" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/logoImage"
+            app:layout_constraintBottom_toBottomOf="@+id/logoImage"
+            android:numStars="5"
+            android:isIndicator="true"
+            android:progressDrawable="@drawable/stars_list"
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/reviewsCounterValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/ratingBar"
+            android:layout_marginStart="6dp"
+            app:layout_constraintTop_toTopOf="@+id/ratingBar"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+            android:textSize="8sp"
+            android:textColor="#6D6D80"
+            android:textStyle="bold"
+            tools:text="125 REVIEWS" />
+
+        <View
+            android:id="@+id/viewAgeFromContainer"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toTopOf="@+id/logoImage"
+            app:layout_constraintStart_toStartOf="@+id/logoImage"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_age_from"/>
+
+        <TextView
+            android:id="@+id/textViewAgeFromValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/viewAgeFromContainer"
+            app:layout_constraintEnd_toEndOf="@+id/viewAgeFromContainer"
+            app:layout_constraintTop_toTopOf="@+id/viewAgeFromContainer"
+            app:layout_constraintBottom_toBottomOf="@+id/viewAgeFromContainer"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            tools:text="13+" />
+
+        <ImageView
+            android:id="@+id/likeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/viewAgeFromContainer"
+            app:layout_constraintBottom_toBottomOf="@+id/viewAgeFromContainer"
+            app:layout_constraintEnd_toEndOf="@+id/logoImage"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/ike_default" />
+
+        <TextView
+            android:id="@+id/textViewMovieTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/logoImage"
+            app:layout_constraintEnd_toEndOf="@+id/logoImage"
+            app:layout_constraintTop_toBottomOf="@+id/logoImage"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="start"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            tools:text="Avengers: End Game" />
+
+        <TextView
+            android:id="@+id/durationValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/textViewMovieTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textViewMovieTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMovieTitle"
+            tools:text="137 MIN"
+            android:textSize="8sp"
+            android:textColor="#565665"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

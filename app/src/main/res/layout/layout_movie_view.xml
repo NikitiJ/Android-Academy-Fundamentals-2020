@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
+    android:id="@+id/mainWrapper"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="170dp"
     android:layout_height="300dp"
+    android:clipChildren="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,16 +67,12 @@
             app:layout_constraintEnd_toEndOf="@+id/logoImage"
             tools:text="Action, Adventure, Drama" />
 
-        <RatingBar
+        <dev.nikitij.android.myemptyapplication.views.RatingBarView
             android:id="@+id/ratingBar"
-            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/logoImage"
             app:layout_constraintBottom_toBottomOf="@+id/logoImage"
-            android:numStars="5"
-            android:isIndicator="true"
-            android:progressDrawable="@drawable/stars_list"
             android:layout_marginStart="6dp"
             android:layout_marginBottom="8dp"/>
 

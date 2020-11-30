@@ -1,16 +1,23 @@
 package dev.nikitij.android.myemptyapplication.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.gridlayout.widget.GridLayout
 import dev.nikitij.android.myemptyapplication.R
+import dev.nikitij.android.myemptyapplication.extensions.convertDensityPixelsToPixels
+import dev.nikitij.android.myemptyapplication.models.MovieModel
+import dev.nikitij.android.myemptyapplication.views.MovieItemView
+import java.io.Serializable
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_MOVIES_LIST = "moviesList"
 
 /**
  * A simple [Fragment] subclass.
@@ -19,21 +26,59 @@ private const val ARG_PARAM2 = "param2"
  */
 class MoviesListFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var moviesList = listOf<MovieModel>()
+
+    private var clickListener: OnCardItemClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            moviesList = it.getSerializable(ARG_MOVIES_LIST) as List<MovieModel>
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnCardItemClickListener) {
+            clickListener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        clickListener = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_movies_list, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //добавить список фильмов
+        val moviesContainer = getView()!!.findViewById<GridLayout>(R.id.moviesListContainer)
+        moviesList.forEach { movieModel ->
+            val lp = android.widget.GridLayout.LayoutParams(ViewGroup.MarginLayoutParams(GridLayout.LayoutParams.WRAP_CONTENT, GridLayout.LayoutParams.WRAP_CONTENT))
+            lp.setMargins(0, context!!.convertDensityPixelsToPixels(8),
+                    context!!.convertDensityPixelsToPixels(8), context!!.convertDensityPixelsToPixels(8))
+            lp.setGravity(Gravity.CENTER)
+
+            val movieView = MovieItemView(context!!)
+            movieView.bind(movieModel)
+            movieView.layoutParams = lp
+            moviesContainer.addView(movieView)
+
+            movieView.findViewById<CardView>(R.id.mainWrapper).setOnClickListener {
+                clickListener?.onMovieCardItemClick(movieModel)
+            }
+        }
+    }
+
+    //прокинуть клик на вьюшке фильма - на активность и запустить другой фрагмент и передать в него модель фильма!
+    interface OnCardItemClickListener {
+        fun onMovieCardItemClick(model: MovieModel)
     }
 
     companion object {
@@ -47,11 +92,10 @@ class MoviesListFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(moviesListParams: List<MovieModel>) =
                 MoviesListFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
+                        putSerializable(ARG_MOVIES_LIST, moviesListParams as Serializable)
                     }
                 }
     }

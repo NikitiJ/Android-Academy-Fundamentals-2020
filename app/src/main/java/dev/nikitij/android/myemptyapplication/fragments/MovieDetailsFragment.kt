@@ -1,16 +1,24 @@
 package dev.nikitij.android.myemptyapplication.fragments
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.gridlayout.widget.GridLayout
 import dev.nikitij.android.myemptyapplication.R
+import dev.nikitij.android.myemptyapplication.extensions.convertDensityPixelsToPixels
+import dev.nikitij.android.myemptyapplication.models.ActorModel
+import dev.nikitij.android.myemptyapplication.models.MovieModel
+import dev.nikitij.android.myemptyapplication.views.ActorItemView
+import dev.nikitij.android.myemptyapplication.views.RatingBarView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_MOVIE_MODEL = "movieModel"
 
 /**
  * A simple [Fragment] subclass.
@@ -19,14 +27,12 @@ private const val ARG_PARAM2 = "param2"
  */
 class MovieDetailsFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var movieModel: MovieModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            movieModel = it.getSerializable(ARG_MOVIE_MODEL) as MovieModel?
         }
     }
 
@@ -36,6 +42,35 @@ class MovieDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_movie_details, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<TextView>(R.id.textViewBack).setOnClickListener {
+            fragmentManager?.popBackStack()
+        }
+
+        view.findViewById<ImageView>(R.id.logoTop).setImageDrawable(context!!.getDrawable(movieModel!!.drawableBgResource!!))
+        view.findViewById<TextView>(R.id.textViewAgeFromValue).text = "${movieModel!!.ageFrom}+"
+        view.findViewById<TextView>(R.id.movieTitle).text = movieModel!!.title
+        view.findViewById<TextView>(R.id.genresListValue).text = movieModel!!.genresList
+        view.findViewById<RatingBarView>(R.id.ratingBar).setupStars(movieModel!!.rating)
+
+        view.findViewById<TextView>(R.id.reviewsCounterValue).text = "${movieModel!!.reviewsCounter} ${resources.getQuantityString(R.plurals.reviews_plurals, movieModel!!.reviewsCounter)}"
+        view.findViewById<TextView>(R.id.storyLineText).text = movieModel!!.storyLine
+
+        val actorsContainer = view.findViewById<GridLayout>(R.id.actorsContainer)
+        movieModel!!.actors.forEach {
+            val lp = android.widget.GridLayout.LayoutParams(ViewGroup.MarginLayoutParams(GridLayout.LayoutParams.WRAP_CONTENT, GridLayout.LayoutParams.WRAP_CONTENT))
+            lp.setMargins(0, context!!.convertDensityPixelsToPixels(8),
+                    context!!.convertDensityPixelsToPixels(8), context!!.convertDensityPixelsToPixels(8))
+            lp.setGravity(Gravity.CENTER)
+
+            val actorView = ActorItemView(context!!)
+            actorView.bind(it)
+            actorView.layoutParams = lp
+            actorsContainer.addView(actorView)
+        }
     }
 
     companion object {
@@ -49,11 +84,10 @@ class MovieDetailsFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(model: MovieModel) =
             MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putSerializable(ARG_MOVIE_MODEL, model)
                 }
             }
     }

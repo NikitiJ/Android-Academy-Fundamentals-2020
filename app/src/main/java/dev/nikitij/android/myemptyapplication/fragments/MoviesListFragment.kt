@@ -9,7 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.gridlayout.widget.GridLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dev.nikitij.android.myemptyapplication.R
+import dev.nikitij.android.myemptyapplication.adapters.MoviesAdapter
+import dev.nikitij.android.myemptyapplication.decorations.LinearVerticalSpacingItemDecoration
 import dev.nikitij.android.myemptyapplication.extensions.convertDensityPixelsToPixels
 import dev.nikitij.android.myemptyapplication.models.MovieModel
 import dev.nikitij.android.myemptyapplication.views.MovieItemView
@@ -58,8 +62,13 @@ class MoviesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //добавить список фильмов
-        val moviesContainer = getView()!!.findViewById<GridLayout>(R.id.moviesListContainer)
-        moviesList.forEach { movieModel ->
+        val moviesContainer = getView()!!.findViewById<RecyclerView>(R.id.moviesListContainer)
+        moviesContainer.adapter = MoviesAdapter()
+        moviesContainer.layoutManager = GridLayoutManager(context, 2)
+        moviesContainer.addItemDecoration(LinearVerticalSpacingItemDecoration(context!!.convertDensityPixelsToPixels(8)))
+        (moviesContainer.adapter as MoviesAdapter).submitList(moviesList)
+
+        /*moviesList.forEach { movieModel ->
             val lp = android.widget.GridLayout.LayoutParams(ViewGroup.MarginLayoutParams(GridLayout.LayoutParams.WRAP_CONTENT, GridLayout.LayoutParams.WRAP_CONTENT))
             lp.setMargins(0, context!!.convertDensityPixelsToPixels(8),
                     context!!.convertDensityPixelsToPixels(8), context!!.convertDensityPixelsToPixels(8))
@@ -73,7 +82,7 @@ class MoviesListFragment : Fragment() {
             movieView.findViewById<CardView>(R.id.mainWrapper).setOnClickListener {
                 clickListener?.onMovieCardItemClick(movieModel)
             }
-        }
+        }*/
     }
 
     //прокинуть клик на вьюшке фильма - на активность и запустить другой фрагмент и передать в него модель фильма!

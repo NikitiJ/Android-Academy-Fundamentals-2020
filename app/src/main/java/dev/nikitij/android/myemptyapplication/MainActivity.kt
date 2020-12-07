@@ -11,7 +11,6 @@ class MainActivity : AppCompatActivity(), MoviesListFragment.OnCardItemClickList
 
     private var moviesList = listOf<MovieModel>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

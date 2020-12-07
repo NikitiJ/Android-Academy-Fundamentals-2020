@@ -7,9 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.gridlayout.widget.GridLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
+import androidx.recyclerview.widget.RecyclerView
 import dev.nikitij.android.myemptyapplication.R
+import dev.nikitij.android.myemptyapplication.adapters.ActorsAdapter
+import dev.nikitij.android.myemptyapplication.decorations.LinearHorizontalSpacingItemDecoration
 import dev.nikitij.android.myemptyapplication.extensions.convertDensityPixelsToPixels
 import dev.nikitij.android.myemptyapplication.models.ActorModel
 import dev.nikitij.android.myemptyapplication.models.MovieModel
@@ -59,8 +65,13 @@ class MovieDetailsFragment : Fragment() {
         view.findViewById<TextView>(R.id.reviewsCounterValue).text = "${movieModel!!.reviewsCounter} ${resources.getQuantityString(R.plurals.reviews_plurals, movieModel!!.reviewsCounter)}"
         view.findViewById<TextView>(R.id.storyLineText).text = movieModel!!.storyLine
 
-        val actorsContainer = view.findViewById<GridLayout>(R.id.actorsContainer)
-        movieModel!!.actors.forEach {
+        val actorsContainer = view.findViewById<RecyclerView>(R.id.actorsContainer)
+        actorsContainer.adapter = ActorsAdapter()
+        actorsContainer.layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
+        actorsContainer.addItemDecoration(LinearHorizontalSpacingItemDecoration(context!!.convertDensityPixelsToPixels(16)))
+        (actorsContainer.adapter as ActorsAdapter).submitList(movieModel!!.actors)
+
+        /*movieModel!!.actors.forEach {
             val lp = android.widget.GridLayout.LayoutParams(ViewGroup.MarginLayoutParams(GridLayout.LayoutParams.WRAP_CONTENT, GridLayout.LayoutParams.WRAP_CONTENT))
             lp.setMargins(0, context!!.convertDensityPixelsToPixels(8),
                     context!!.convertDensityPixelsToPixels(8), context!!.convertDensityPixelsToPixels(8))
@@ -70,7 +81,7 @@ class MovieDetailsFragment : Fragment() {
             actorView.bind(it)
             actorView.layoutParams = lp
             actorsContainer.addView(actorView)
-        }
+        }*/
     }
 
     companion object {

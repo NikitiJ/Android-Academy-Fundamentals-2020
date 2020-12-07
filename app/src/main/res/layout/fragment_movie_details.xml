@@ -146,10 +146,9 @@
             app:layout_constraintTop_toBottomOf="@+id/storyLineText"
             android:text="@string/cast" />
 
-        <androidx.gridlayout.widget.GridLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/actorsContainer"
             android:layout_width="0dp"
-            app:columnCount="4"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/castTitle"
             android:layout_marginTop="8dp"
@@ -161,7 +160,7 @@
             android:layout_marginBottom="120dp"
             app:layout_constraintVertical_bias="0">
 
-        </androidx.gridlayout.widget.GridLayout>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

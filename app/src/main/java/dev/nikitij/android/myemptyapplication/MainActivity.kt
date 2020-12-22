@@ -2,6 +2,7 @@ package dev.nikitij.android.myemptyapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.android.academy.fundamentals.homework.features.data.Movie
 import dev.nikitij.android.myemptyapplication.fragments.MovieDetailsFragment
 import dev.nikitij.android.myemptyapplication.fragments.MoviesListFragment
 import dev.nikitij.android.myemptyapplication.models.ActorModel
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(), MoviesListFragment.OnCardItemClickList
         )
     }
 
-    override fun onMovieCardItemClick(model: MovieModel) {
+    override fun onMovieCardItemClick(model: Movie) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentsContainer, MovieDetailsFragment.newInstance(model))
                 .addToBackStack(null)

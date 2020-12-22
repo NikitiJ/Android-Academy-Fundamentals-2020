@@ -13,6 +13,8 @@ import androidx.gridlayout.widget.GridLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView
+import com.android.academy.fundamentals.homework.features.data.Movie
+import com.bumptech.glide.Glide
 import dev.nikitij.android.myemptyapplication.R
 import dev.nikitij.android.myemptyapplication.adapters.ActorsAdapter
 import dev.nikitij.android.myemptyapplication.decorations.LinearHorizontalSpacingItemDecoration
@@ -21,24 +23,21 @@ import dev.nikitij.android.myemptyapplication.models.ActorModel
 import dev.nikitij.android.myemptyapplication.models.MovieModel
 import dev.nikitij.android.myemptyapplication.views.ActorItemView
 import dev.nikitij.android.myemptyapplication.views.RatingBarView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_MOVIE_MODEL = "movieModel"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MovieDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MovieDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var movieModel: MovieModel? = null
+
+class MovieDetailsFragment : Fragment(), CoroutineScope by MainScope() {
+
+    private var movieModel: Movie? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            movieModel = it.getSerializable(ARG_MOVIE_MODEL) as MovieModel?
+            movieModel = it.getSerializable(ARG_MOVIE_MODEL) as Movie?
         }
     }
 
@@ -56,46 +55,45 @@ class MovieDetailsFragment : Fragment() {
             fragmentManager?.popBackStack()
         }
 
-        view.findViewById<ImageView>(R.id.logoTop).setImageDrawable(context!!.getDrawable(movieModel!!.drawableBgResource!!))
-        view.findViewById<TextView>(R.id.textViewAgeFromValue).text = "${movieModel!!.ageFrom}+"
-        view.findViewById<TextView>(R.id.movieTitle).text = movieModel!!.title
-        view.findViewById<TextView>(R.id.genresListValue).text = movieModel!!.genresList
-        view.findViewById<RatingBarView>(R.id.ratingBar).setupStars(movieModel!!.rating)
+        val logoBg = view.findViewById<ImageView>(R.id.logoTop)
 
-        view.findViewById<TextView>(R.id.reviewsCounterValue).text = "${movieModel!!.reviewsCounter} ${resources.getQuantityString(R.plurals.reviews_plurals, movieModel!!.reviewsCounter)}"
-        view.findViewById<TextView>(R.id.storyLineText).text = movieModel!!.storyLine
+        Glide.with(logoBg)
+            .load(movieModel!!.backdrop)
+            .into(logoBg)
+
+        view.findViewById<TextView>(R.id.textViewAgeFromValue).text = "${movieModel!!.minimumAge}+"
+        view.findViewById<TextView>(R.id.movieTitle).text = movieModel!!.title
+
+        val strBuilder = StringBuilder(movieModel!!.genres.size)
+        movieModel!!.genres.forEachIndexed { index, genre ->
+            if (index == 0) {
+                strBuilder.append(genre.name)
+            } else {
+                strBuilder.append(", ${genre.name}")
+            }
+        }
+        view.findViewById<TextView>(R.id.genresListValue).text = strBuilder.toString()
+
+        view.findViewById<RatingBarView>(R.id.ratingBar).setupStars(movieModel!!.getFiveStarRatingValue())
+
+        view.findViewById<TextView>(R.id.reviewsCounterValue).text = "${movieModel!!.numberOfRatings} ${resources.getQuantityString(R.plurals.reviews_plurals, movieModel!!.numberOfRatings)}"
+        view.findViewById<TextView>(R.id.storyLineText).text = movieModel!!.overview
 
         val actorsContainer = view.findViewById<RecyclerView>(R.id.actorsContainer)
         actorsContainer.adapter = ActorsAdapter()
         actorsContainer.layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
         actorsContainer.addItemDecoration(LinearHorizontalSpacingItemDecoration(context!!.convertDensityPixelsToPixels(16)))
-        (actorsContainer.adapter as ActorsAdapter).submitList(movieModel!!.actors)
 
-        /*movieModel!!.actors.forEach {
-            val lp = android.widget.GridLayout.LayoutParams(ViewGroup.MarginLayoutParams(GridLayout.LayoutParams.WRAP_CONTENT, GridLayout.LayoutParams.WRAP_CONTENT))
-            lp.setMargins(0, context!!.convertDensityPixelsToPixels(8),
-                    context!!.convertDensityPixelsToPixels(8), context!!.convertDensityPixelsToPixels(8))
-            lp.setGravity(Gravity.CENTER)
-
-            val actorView = ActorItemView(context!!)
-            actorView.bind(it)
-            actorView.layoutParams = lp
-            actorsContainer.addView(actorView)
-        }*/
+        //загрузка актеров?
+        //(actorsContainer.adapter as ActorsAdapter).submitList(movieModel!!.actors)
+        launch {
+            (actorsContainer.adapter as ActorsAdapter).submitList(movieModel!!.actors)
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MovieDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(model: MovieModel) =
+        fun newInstance(model: Movie) =
             MovieDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_MOVIE_MODEL, model)

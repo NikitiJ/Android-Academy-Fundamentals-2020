@@ -9,14 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.android.academy.fundamentals.homework.features.data.Movie
+import com.bumptech.glide.Glide
 import dev.nikitij.android.myemptyapplication.R
 import dev.nikitij.android.myemptyapplication.fragments.MovieDetailsFragment
 import dev.nikitij.android.myemptyapplication.models.MovieModel
 import dev.nikitij.android.myemptyapplication.views.RatingBarView
+import kotlin.random.Random
 
 class MoviesAdapter : RecyclerView.Adapter<MovieViewHolder>() {
 
-    private var moviesList = mutableListOf<MovieModel>()
+    private var moviesList = mutableListOf<Movie>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_movie_view, parent, false))
@@ -30,7 +33,7 @@ class MoviesAdapter : RecyclerView.Adapter<MovieViewHolder>() {
         return moviesList.size
     }
 
-    fun submitList(newList: List<MovieModel>) {
+    fun submitList(newList: List<Movie>) {
         moviesList = newList.toMutableList()
         notifyDataSetChanged()
     }
@@ -48,26 +51,39 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val movieTitleValue: TextView = itemView.findViewById(R.id.textViewMovieTitle)
     private val durationValue: TextView = itemView.findViewById(R.id.durationValue)
 
-    fun bind(model: MovieModel) {
-        model.drawableBgResource?.let { logoImage.setImageResource(it) }
-        ageFromValue.text = "${model.ageFrom}+"
-        if (model.isFavorite) {
+    fun bind(model: Movie) {
+        Glide.with(logoImage)
+            .load(model.backdrop)
+            .into(logoImage)
+
+        ageFromValue.text = "${model.minimumAge}+"
+        if (Random.nextInt(1, 10) % 2 == 0) {
             likeIcon.setImageResource(R.drawable.like_active)
         } else {
             likeIcon.setImageResource(R.drawable.ike_default)
         }
-        genresValueText.text = model.genresList
-        ratingBarView.setupStars(model.rating)
-        reviewsCounterValue.text = "${model.reviewsCounter} ${itemView.context.resources.getQuantityString(R.plurals.reviews_plurals, model.reviewsCounter)}"
+
+        val strBuilder = StringBuilder(model.genres.size)
+        model.genres.forEachIndexed { index, genre ->
+            if (index == 0) {
+                strBuilder.append(genre.name)
+            } else {
+                strBuilder.append(", ${genre.name}")
+            }
+        }
+        genresValueText.text = strBuilder.toString()
+
+        ratingBarView.setupStars(model.getFiveStarRatingValue())
+
+        reviewsCounterValue.text = "${model.numberOfRatings}"
         movieTitleValue.text = model.title
-        durationValue.text = "${model.duration} MIN"
+        durationValue.text = "${model.runtime} MIN"
 
         mainWrapper.setOnClickListener {
             (itemView.context as AppCompatActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentsContainer, MovieDetailsFragment.newInstance(model))
                 .addToBackStack(null)
                 .commit()
-
         }
     }
 }
